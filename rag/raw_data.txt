@@ -1,0 +1,29 @@
+
+LiveKit is a real-time audio and video platform that makes it easy to build applications with real-time communication features.
+
+LiveKit is a self-hosted, open-source platform for real-time communication. It's built with modern languages, modern architectures, modern codecs, all with the developer in mind.
+
+LiveKit provides a complete platform for building applications with real-time features:
+1. LiveKit Server: Media server that handles WebRTC connections and SFU functionality
+2. Client SDKs: For web, iOS, Android, React Native, Flutter, and more
+3. Server SDKs: For all major languages
+4. Agent SDK: For building autonomous AI agents with voice capabilities
+
+Some key features of LiveKit include:
+- High-quality audio and video with modern codecs
+- Scalable SFU architecture for large rooms
+- Recording, transcription, and other media processing features
+- Low latency, high reliability
+- End-to-end encryption options
+- Open-source and self-hosted
+
+The Agent SDK helps developers quickly build AI agents that can interact with users through voice. Key Agent features include:
+- Voice activity detection
+- Automatic speech recognition
+- Natural language understanding
+- Text-to-speech synthesis
+- Function calling capabilities
+- RAG (Retrieval Augmented Generation) support for knowledge base integration
+
+With the Agent SDK, developers can create agents that can understand and respond to user speech, execute functions based on user requests, and use knowledge bases to provide accurate information.
+            
