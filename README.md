@@ -257,5 +257,5 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 - [Raspberry Pi Transcriber](hardware/pi_zero_transcriber.py)
 
 ## Complex Demo Agents
-- [Medical Office Triage](demos/medical_office_triage/)
-- [Personal Shopper](demos/personal_shopper/)
+- [Medical Office Triage](complex-agents/medical_office_triage/)
+- [Personal Shopper](complex-agents/personal_shopper/)
