@@ -198,6 +198,16 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 </p>
 </td>
 </tr>
+
+<tr>
+<td width="50%">
+<h3>🤖 Vision Agent 👀</h3>
+<p>An AI-powered assistant that can answer questions about what it sees.</p>
+<p>
+<a href="vision/agent.py">Code</a>
+</p>
+</td>
+</tr>
 </table>
 
 ## Code Examples by Category
@@ -255,6 +265,9 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 
 ### Hardware Integration
 - [Raspberry Pi Transcriber](hardware/pi_zero_transcriber.py)
+
+### Vision Agents
+- [Vision Agent](/vision/agent.py)
 
 ## Complex Demo Agents
 - [Medical Office Triage](complex-agents/medical_office_triage/)
