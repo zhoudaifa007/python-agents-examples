@@ -40,23 +40,17 @@ class RimeAgent(Agent):
     @function_tool
     async def switch_to_elevenlabs(self):
         """Switch to ElevenLabs TTS voice"""
-        # Create a new session with ElevenLabsAgent
-        await self.session.update_agent(ElevenLabsAgent())
-        return True
+        return ElevenLabsAgent()
     
     @function_tool
     async def switch_to_cartesia(self):
         """Switch to Cartesia TTS voice"""
-        # Create a new session with CartesiaAgent
-        await self.session.update_agent(CartesiaAgent())
-        return True
+        return CartesiaAgent()
     
     @function_tool
     async def switch_to_playai(self):
         """Switch to PlayAI TTS voice"""
-        # Create a new session with PlayAIAgent
-        await self.session.update_agent(PlayAIAgent())
-        return True
+        return PlayAIAgent()
 
 
 class ElevenLabsAgent(Agent):
@@ -83,23 +77,17 @@ class ElevenLabsAgent(Agent):
     @function_tool
     async def switch_to_rime(self):
         """Switch to Rime TTS voice"""
-        # Create a new session with RimeAgent
-        await self.session.update_agent(RimeAgent())
-        return True
+        return RimeAgent()
     
     @function_tool
     async def switch_to_cartesia(self):
         """Switch to Cartesia TTS voice"""
-        # Create a new session with CartesiaAgent
-        await self.session.update_agent(CartesiaAgent())
-        return True
+        return CartesiaAgent()
     
     @function_tool
     async def switch_to_playai(self):
         """Switch to PlayAI TTS voice"""
-        # Create a new session with PlayAIAgent
-        await self.session.update_agent(PlayAIAgent())
-        return True
+        return PlayAIAgent()
 
 
 class CartesiaAgent(Agent):
@@ -128,23 +116,17 @@ class CartesiaAgent(Agent):
     @function_tool
     async def switch_to_rime(self):
         """Switch to Rime TTS voice"""
-        # Create a new session with RimeAgent
-        await self.session.update_agent(RimeAgent())
-        return True
+        return RimeAgent()
     
     @function_tool
     async def switch_to_elevenlabs(self):
         """Switch to ElevenLabs TTS voice"""
-        # Create a new session with ElevenLabsAgent
-        await self.session.update_agent(ElevenLabsAgent())
-        return True
+        return ElevenLabsAgent()
     
     @function_tool
     async def switch_to_playai(self):
         """Switch to PlayAI TTS voice"""
-        # Create a new session with PlayAIAgent
-        await self.session.update_agent(PlayAIAgent())
-        return True
+        return PlayAIAgent()
 
 
 class PlayAIAgent(Agent):
@@ -173,23 +155,17 @@ class PlayAIAgent(Agent):
     @function_tool
     async def switch_to_rime(self):
         """Switch to Rime TTS voice"""
-        # Create a new session with RimeAgent
-        await self.session.update_agent(RimeAgent())
-        return True
+        return RimeAgent()
     
     @function_tool
     async def switch_to_elevenlabs(self):
         """Switch to ElevenLabs TTS voice"""
-        # Create a new session with ElevenLabsAgent
-        await self.session.update_agent(ElevenLabsAgent())
-        return True
+        return ElevenLabsAgent()
     
     @function_tool
     async def switch_to_cartesia(self):
         """Switch to Cartesia TTS voice"""
-        # Create a new session with CartesiaAgent
-        await self.session.update_agent(CartesiaAgent())
-        return True
+        return CartesiaAgent()
 
 
 async def entrypoint(ctx: JobContext):
