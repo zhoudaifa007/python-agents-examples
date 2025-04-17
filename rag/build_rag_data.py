@@ -6,16 +6,19 @@ from dotenv import load_dotenv
 from rag_db_builder import RAGBuilder
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger("build-rag-data")
 
 # Load environment variables
 load_dotenv()
 
+
 async def main() -> None:
     """
     Build the RAG database from the raw data file.
-    
+
     Usage:
         1. Create a text file with your knowledge base content in 'raw_data.txt'
         2. Run this script to build the RAG database
@@ -55,21 +58,22 @@ The Agent SDK helps developers quickly build AI agents that can interact with us
 
 With the Agent SDK, developers can create agents that can understand and respond to user speech, execute functions based on user requests, and use knowledge bases to provide accurate information.
             """)
-    
+
     # Create and build the RAG database
     output_dir = Path("vdb_data")
     output_dir.mkdir(exist_ok=True)
-    
+
     logger.info("Building RAG database...")
     await RAGBuilder.create_from_file(
         file_path=raw_data_path,
         index_path=output_dir,
         data_path=output_dir / "paragraphs.pkl",
-        embeddings_dimension=1536
+        embeddings_dimension=1536,
     )
     logger.info("RAG database successfully built!")
     logger.info(f"Index saved to: {output_dir}")
     logger.info(f"Data saved to: {output_dir / 'paragraphs.pkl'}")
 
+
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())
