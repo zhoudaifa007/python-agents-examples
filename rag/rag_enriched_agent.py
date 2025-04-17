@@ -118,7 +118,7 @@ class RAGEnrichedAgent(Agent):
         )
 
         # Initialize RAG components
-        vdb_dir = Path("vdb_data")
+        vdb_dir = Path(__file__).parent / "vdb_data"
         data_path = vdb_dir / "paragraphs.pkl"
 
         if not vdb_dir.exists() or not data_path.exists():

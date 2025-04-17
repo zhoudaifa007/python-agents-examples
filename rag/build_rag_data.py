@@ -34,7 +34,7 @@ async def main() -> None:
         return
 
     # Create and build the RAG database
-    output_dir = Path("vdb_data")
+    output_dir = Path(__file__).parent / "vdb_data"
     output_dir.mkdir(exist_ok=True)
 
     logger.info("Building RAG database...")
