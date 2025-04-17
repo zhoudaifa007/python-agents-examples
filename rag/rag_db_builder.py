@@ -221,6 +221,39 @@ class RAGBuilder:
         self._embeddings_model = embeddings_model
         self._metric = metric
 
+    def _clean_content(self, text: str) -> str:
+        """
+        Clean the content by removing navigation elements and UI components.
+        """
+        # Remove common navigation elements
+        lines = text.split('\n')
+        cleaned_lines = []
+        
+        # Skip lines that are just navigation or UI elements
+        skip_patterns = [
+            'Docs', 'Search', 'GitHub', 'Slack', 'Sign in',
+            'Home', 'AI Agents', 'Telephony', 'Recipes', 'Reference',
+            'On this page', 'Get started with LiveKit today',
+            'Content from https://docs.livekit.io/'
+        ]
+        
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+                
+            # Skip if line matches any skip patterns
+            if any(pattern in line for pattern in skip_patterns):
+                continue
+                
+            # Skip if line is just a URL or navigation link
+            if line.startswith('http') or line.startswith('[') or line.endswith(']'):
+                continue
+                
+            cleaned_lines.append(line)
+            
+        return '\n'.join(cleaned_lines)
+
     async def _create_embeddings(
         self, text: str, http_session: Optional[aiohttp.ClientSession] = None
     ) -> openai.EmbeddingData:
@@ -253,8 +286,15 @@ class RAGBuilder:
                 f=self._embeddings_dimension, metric=self._metric
             )
 
+            # Clean and filter texts
+            cleaned_texts = []
+            for text in texts:
+                cleaned = self._clean_content(text)
+                if cleaned:  # Only include non-empty cleaned texts
+                    cleaned_texts.append(cleaned)
+
             # Generate UUIDs for each paragraph
-            paragraphs_by_uuid = {str(uuid.uuid4()): text for text in texts}
+            paragraphs_by_uuid = {str(uuid.uuid4()): text for text in cleaned_texts}
 
             # Create iterator with optional progress bar
             items = paragraphs_by_uuid.items()

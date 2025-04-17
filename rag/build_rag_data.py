@@ -17,47 +17,21 @@ load_dotenv()
 
 async def main() -> None:
     """
-    Build the RAG database from the raw data file.
+    Build the RAG database from the scraped docs content.
 
     Usage:
-        1. Create a text file with your knowledge base content in 'raw_data.txt'
+        1. Run scrape_docs.py to scrape the docs content
         2. Run this script to build the RAG database
         3. The database will be created in the 'vdb_data' directory
     """
-    # Check if raw_data.txt exists, create a sample if it doesn't
-    raw_data_path = Path("raw_data.txt")
+    # Check if raw_data.txt exists
+    raw_data_path = Path(__file__).parent / "raw_data.txt"
     if not raw_data_path.exists():
-        logger.info("Creating sample raw_data.txt file")
-        with open(raw_data_path, "w") as f:
-            f.write("""
-LiveKit is a real-time audio and video platform that makes it easy to build applications with real-time communication features.
-
-LiveKit is a self-hosted, open-source platform for real-time communication. It's built with modern languages, modern architectures, modern codecs, all with the developer in mind.
-
-LiveKit provides a complete platform for building applications with real-time features:
-1. LiveKit Server: Media server that handles WebRTC connections and SFU functionality
-2. Client SDKs: For web, iOS, Android, React Native, Flutter, and more
-3. Server SDKs: For all major languages
-4. Agent SDK: For building autonomous AI agents with voice capabilities
-
-Some key features of LiveKit include:
-- High-quality audio and video with modern codecs
-- Scalable SFU architecture for large rooms
-- Recording, transcription, and other media processing features
-- Low latency, high reliability
-- End-to-end encryption options
-- Open-source and self-hosted
-
-The Agent SDK helps developers quickly build AI agents that can interact with users through voice. Key Agent features include:
-- Voice activity detection
-- Automatic speech recognition
-- Natural language understanding
-- Text-to-speech synthesis
-- Function calling capabilities
-- RAG (Retrieval Augmented Generation) support for knowledge base integration
-
-With the Agent SDK, developers can create agents that can understand and respond to user speech, execute functions based on user requests, and use knowledge bases to provide accurate information.
-            """)
+        logger.error(
+            "raw_data.txt not found. Please run scrape_docs.py first:\n"
+            "$ python scrape_docs.py"
+        )
+        return
 
     # Create and build the RAG database
     output_dir = Path("vdb_data")
