@@ -208,6 +208,16 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 </p>
 </td>
 </tr>
+
+<tr>
+<td width="50%">
+<h3>🔍 RAG-Enriched Agent</h3>
+<p>An agent that can answer questions about the LiveKit docs site.</p>
+<p>
+<a href="rag">Code</a>
+</p>
+</td>
+</tr>
 </table>
 
 ## Code Examples by Category
@@ -272,3 +282,4 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 ## Complex Demo Agents
 - [Medical Office Triage](complex-agents/medical_office_triage/)
 - [Personal Shopper](complex-agents/personal_shopper/)
+- [RAG-Enriched Agent](rag/)

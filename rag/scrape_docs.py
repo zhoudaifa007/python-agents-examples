@@ -21,7 +21,7 @@ load_dotenv()
 
 BASE_URL = "https://docs.livekit.io"
 SITEMAP_URL = f"{BASE_URL}/sitemap.xml"
-OUTPUT_FILE = Path(__file__).parent / "raw_data.txt"
+OUTPUT_FILE = Path(__file__).parent / "data/raw_data.txt"
 EXCLUDED_PATHS = ["/reference"]  # Paths to exclude from scraping
 
 class DocsScraper:

@@ -22,10 +22,10 @@ async def main() -> None:
     Usage:
         1. Run scrape_docs.py to scrape the docs content
         2. Run this script to build the RAG database
-        3. The database will be created in the 'vdb_data' directory
+        3. The database will be created in the 'data' directory
     """
     # Check if raw_data.txt exists
-    raw_data_path = Path(__file__).parent / "raw_data.txt"
+    raw_data_path = Path(__file__).parent / "data/raw_data.txt"
     if not raw_data_path.exists():
         logger.error(
             "raw_data.txt not found. Please run scrape_docs.py first:\n"
@@ -34,7 +34,7 @@ async def main() -> None:
         return
 
     # Create and build the RAG database
-    output_dir = Path(__file__).parent / "vdb_data"
+    output_dir = Path(__file__).parent / "data"
     output_dir.mkdir(exist_ok=True)
 
     logger.info("Building RAG database...")

@@ -12,7 +12,6 @@ Before running this agent:
 
 import logging
 import pickle
-import random
 from pathlib import Path
 from typing import Literal, Any
 from collections.abc import Iterable
@@ -20,9 +19,18 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 import annoy
 
-from livekit.agents import JobContext, WorkerOptions, cli, ChatContext, ChatMessage, RunContext, function_tool
-from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import openai, silero, deepgram
+from livekit.agents import (
+    JobContext,
+    WorkerOptions,
+    cli,
+    RunContext,
+    function_tool,
+    RoomInputOptions,
+    Agent,
+    AgentSession,
+)
+from livekit.plugins import openai, silero, deepgram, noise_cancellation
+from livekit.plugins.turn_detector.english import EnglishModel
 
 # Load environment variables
 load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env")
@@ -118,7 +126,7 @@ class RAGEnrichedAgent(Agent):
         )
 
         # Initialize RAG components
-        vdb_dir = Path(__file__).parent / "vdb_data"
+        vdb_dir = Path(__file__).parent / "data"
         data_path = vdb_dir / "paragraphs.pkl"
 
         if not vdb_dir.exists() or not data_path.exists():
@@ -155,11 +163,15 @@ class RAGEnrichedAgent(Agent):
             )
 
             # Query the index for more results than we need to ensure we have enough new content
-            all_results = self._annoy_index.query(query_embedding[0].embedding, n=5)  # Get more results initially
+            all_results = self._annoy_index.query(
+                query_embedding[0].embedding, n=5
+            )  # Get more results initially
 
             # Filter out previously seen results
-            new_results = [r for r in all_results if r.userdata not in self._seen_results]
-            
+            new_results = [
+                r for r in all_results if r.userdata not in self._seen_results
+            ]
+
             # If we don't have enough new results, clear the seen results and start fresh
             if len(new_results) == 0:
                 return "No new results found."
@@ -171,7 +183,7 @@ class RAGEnrichedAgent(Agent):
             for result in new_results:
                 # Add result to seen set
                 self._seen_results.add(result.userdata)
-                
+
                 paragraph = self._paragraphs_by_uuid.get(result.userdata, "")
                 if paragraph:
                     # Extract source URL if available in the paragraph
@@ -179,23 +191,27 @@ class RAGEnrichedAgent(Agent):
                     if "from [" in paragraph:
                         source = paragraph.split("from [")[1].split("]")[0]
                         paragraph = paragraph.split("]")[1].strip()
-                    
+
                     context_parts.append(f"Source: {source}\nContent: {paragraph}\n")
 
             if not context_parts:
                 return
-            
+
             # Combine all context parts with clear separation
             full_context = "\n\n".join(context_parts)
-            logger.info(f"Results for query: {query}, full context: {full_context.replace('\n', '\\n')}")
-            
+            logger.info(
+                f"Results for query: {query}, full context: {full_context.replace('\n', '\\n')}"
+            )
+
             return full_context
         except Exception as e:
             return "Could not find any relevant information for that query."
 
     async def on_enter(self):
         """Called when the agent enters the session."""
-        self.session.generate_reply(instructions="Briefly greet the user and offer your assistance with LiveKit.")
+        self.session.generate_reply(
+            instructions="Briefly greet the user and offer your assistance with LiveKit."
+        )
 
 
 async def entrypoint(ctx: JobContext):
@@ -207,12 +223,19 @@ async def entrypoint(ctx: JobContext):
         llm=openai.LLM(model="gpt-4o"),
         tts=openai.TTS(
             instructions="You are a helpful assistant with a pleasant voice.",
-            voice="ash"
+            voice="ash",
         ),
+        turn_detection=EnglishModel(),
         vad=silero.VAD.load(),
     )
 
-    await session.start(agent=RAGEnrichedAgent(), room=ctx.room)
+    await session.start(
+        agent=RAGEnrichedAgent(),
+        room=ctx.room,
+        room_input_options=RoomInputOptions(
+            noise_cancellation=noise_cancellation.BVC(),
+        ),
+    )
 
 
 if __name__ == "__main__":

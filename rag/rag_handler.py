@@ -102,7 +102,7 @@ class RAGHandler:
             
             # Initialize RAG handler
             self.rag_handler = RAGHandler(
-                index_path="vdb_data",
+                index_path="data",
                 data_path="my_data.pkl",
                 thinking_style="message"
             )

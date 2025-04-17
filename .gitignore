@@ -1,5 +1,4 @@
 .env
 .env.local
-rag/vdb_data
-rag/raw_data.txt
+rag/data
 __pycache__

@@ -181,7 +181,7 @@ class RAGBuilder:
 
     Example usage:
         builder = RAGBuilder(
-            index_path="vdb_data",
+            index_path="data",
             data_path="my_data.pkl",
             embeddings_dimension=1536
         )
