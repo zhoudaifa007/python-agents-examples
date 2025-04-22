@@ -1,16 +1,79 @@
 import logging
 import pickle
 import random
-import asyncio
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Union, Any, Dict
+from typing import List, Optional, Union, Any, Literal
+from collections.abc import Iterable
+from dataclasses import dataclass
+
+import annoy
 
 from livekit.agents.voice import Agent, RunContext
 from livekit.agents.llm import function_tool
-from livekit.plugins import openai, rag
+from livekit.plugins import openai
 
 logger = logging.getLogger("rag-handler")
+
+# RAG Index Types and Classes
+Metric = Literal["angular", "euclidean", "manhattan", "hamming", "dot"]
+ANNOY_FILE = "index.annoy"
+METADATA_FILE = "metadata.pkl"
+
+@dataclass
+class Item:
+    i: int
+    userdata: Any
+    vector: list[float]
+
+@dataclass
+class _FileData:
+    f: int
+    metric: Metric
+    userdata: dict[int, Any]
+
+@dataclass
+class QueryResult:
+    userdata: Any
+    distance: float
+
+class AnnoyIndex:
+    def __init__(self, index: annoy.AnnoyIndex, filedata: _FileData) -> None:
+        self._index = index
+        self._filedata = filedata
+
+    @classmethod
+    def load(cls, path: str) -> "AnnoyIndex":
+        p = Path(path)
+        index_path = p / ANNOY_FILE
+        metadata_path = p / METADATA_FILE
+
+        with open(metadata_path, "rb") as f:
+            metadata: _FileData = pickle.load(f)
+
+        index = annoy.AnnoyIndex(metadata.f, metadata.metric)
+        index.load(str(index_path))
+        return cls(index, metadata)
+
+    @property
+    def size(self) -> int:
+        return self._index.get_n_items()
+
+    def items(self) -> Iterable[Item]:
+        for i in range(self._index.get_n_items()):
+            item = Item(
+                i=i,
+                userdata=self._filedata.userdata[i],
+                vector=self._index.get_item_vector(i),
+            )
+            yield item
+
+    def query(self, vector: list[float], n: int, search_k: int = -1) -> list[QueryResult]:
+        ids = self._index.get_nns_by_vector(vector, n, search_k=search_k, include_distances=True)
+        return [
+            QueryResult(userdata=self._filedata.userdata[i], distance=distance)
+            for i, distance in zip(*ids)
+        ]
 
 class ThinkingStyle(Enum):
     NONE = "none"
@@ -39,7 +102,7 @@ class RAGHandler:
             
             # Initialize RAG handler
             self.rag_handler = RAGHandler(
-                index_path="vdb_data",
+                index_path="data",
                 data_path="my_data.pkl",
                 thinking_style="message"
             )
@@ -81,7 +144,7 @@ class RAGHandler:
         if not self._data_path.exists():
             raise FileNotFoundError(f"Data file not found at {self._data_path}")
             
-        self._annoy_index = rag.annoy.AnnoyIndex.load(str(self._index_path))
+        self._annoy_index = AnnoyIndex.load(str(self._index_path))
         with open(self._data_path, "rb") as f:
             self._paragraphs_by_uuid = pickle.load(f)
     
