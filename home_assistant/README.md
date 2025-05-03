@@ -2,12 +2,11 @@
 
 This project provides a voice-controlled agent for interacting with your [Home Assistant](https://www.home-assistant.io/) setup. The agent listens for a hot word and allows you to list and control smart devices (like lights and switches) using natural language.
 
-## Demonstration Of Agent In Action
-![Control Lights](https://youtu.be/IwDlZXJjsFY/0.jpg)](https://youtu.be/IwDlZXJjsFY)
+_(click image to see short YouTube video of agent in action)_
 
-![Hide/Un Hide TV](https://youtu.be/mcz0MOzswV0/0.jpg)](https://youtu.be/mcz0MOzswV0)
+[![Control Lights](https://img.youtube.com/vi/IwDlZXJjsFY/0.jpg)](https://youtu.be/IwDlZXJjsFY)
 
-
+[![Hide/Unhide TV](https://img.youtube.com/vi/mcz0MOzswV0/0.jpg)](https://youtu.be/mcz0MOzswV0)
 
 ## Requirements
 
