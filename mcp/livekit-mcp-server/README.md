@@ -1,6 +1,6 @@
 # LiveKit MCP Tools
 
-A collection of tools for managing LiveKit rooms, participants, tokens, and chat functionality using the MCP (Model Calling Protocol) framework.
+A collection of tools for managing LiveKit rooms, participants, tokens, and chat functionality using the MCP (Model Context Protocol) framework.
 
 ## Overview
 
