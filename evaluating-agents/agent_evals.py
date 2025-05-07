@@ -47,7 +47,7 @@ class SimpleAgent(Agent):
 
     @function_tool
     async def grade_answer(self, context: RunContext, result: str, question: str):
-        logging.info(f"Grade for question: {question} - {result}")
+        logger.info(f"Grade for question: {question} - {result}")
         self.session.say(result)
         return None, "I've graded the answer."
 
