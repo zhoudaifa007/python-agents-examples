@@ -62,6 +62,7 @@ async def entrypoint(ctx: JobContext):
         room_input_options=RoomInputOptions(
             # uncomment to enable Krisp BVC noise cancellation
             # noise_cancellation=noise_cancellation.BVC(),
+            # listen agents in addition to SIP and standard participants
             participant_kinds=[
                 rtc.ParticipantKind.PARTICIPANT_KIND_SIP,
                 rtc.ParticipantKind.PARTICIPANT_KIND_STANDARD,
@@ -73,3 +74,4 @@ async def entrypoint(ctx: JobContext):
 
 if __name__ == "__main__":
     cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, agent_name="agent_evaluator"))
+
