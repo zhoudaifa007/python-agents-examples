@@ -11,7 +11,7 @@ This is a voice-enabled educational assistant built with [LiveKit Agents](https:
 - **Multiple-Choice Quizzes**: Test your knowledge with interactive quizzes that provide immediate feedback
 - **Realistic Avatar**: Powered by Tavus for a more engaging visual learning experience
 
-![App screenshot](/.github/assets/frontend-screenshot.png)
+![App screenshot](.github/assets/frontend-screenshot.png)
 
 ## Getting started
 
