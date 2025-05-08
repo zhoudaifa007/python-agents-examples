@@ -1,38 +1,47 @@
 <img src="./.github/assets/app-icon.png" alt="Voice Assistant App Icon" width="100" height="100">
 
-# Web Voice Assistant
+# Roman Empire Study Partner with Tavus Avatar
 
-This is a starter template for [LiveKit Agents](https://docs.livekit.io/agents) that provides a simple voice interface using the [LiveKit JavaScript SDK](https://github.com/livekit/client-sdk-js). It supports [voice](https://docs.livekit.io/agents/start/voice-ai), [transcriptions](https://docs.livekit.io/agents/build/text/), and [virtual avatars](https://docs.livekit.io/agents/integrations/avatar).
+This is a voice-enabled educational assistant built with [LiveKit Agents](https://docs.livekit.io/agents) and [Tavus Avatars](https://tavus.io/). It creates an interactive learning experience focused on the Fall of the Roman Empire, featuring flash cards, quizzes, and Socratic teaching methods.
 
-This template is built with Next.js and is free for you to use or modify as you see fit.
+## Features
 
-![App screenshot](/.github/assets/frontend-screenshot.jpeg)
+- **Conversational Learning**: AI tutor uses Socratic method to guide students through complex historical topics
+- **Interactive Flash Cards**: Visual aids for key concepts that can be flipped to show questions or answers
+- **Multiple-Choice Quizzes**: Test your knowledge with interactive quizzes that provide immediate feedback
+- **Realistic Avatar**: Powered by Tavus for a more engaging visual learning experience
+
+![App screenshot](/.github/assets/frontend-screenshot.png)
 
 ## Getting started
 
-> [!TIP]
-> If you'd like to try this application without modification, you can deploy an instance in just a few clicks with [LiveKit Cloud Sandbox](https://cloud.livekit.io/projects/p_/sandbox/templates/voice-assistant-frontend).
-
-Run the following command to automatically clone this template.
+Run the following commands to set up the frontend:
 
 ```bash
-lk app create --template voice-assistant-frontend
-```
-
-Then run the app with:
-
-```bash
-pnpm install
-pnpm dev
+cd voice-assistant-frontend
+npm install
+npm run dev
 ```
 
 And open http://localhost:3000 in your browser.
 
-You'll also need an agent to speak with. Try our [Voice AI Quickstart](https://docs.livekit.io/start/voice-ai) for the easiest way to get started.
+You'll need to run the Tavus agent in a separate terminal:
+
+```bash
+cd avatars/tavus
+python tavus.py
+```
 
 > [!NOTE]
-> If you need to modify the LiveKit project credentials used, you can edit `.env.local` (copy from `.env.example` if you don't have one) to suit your needs.
+> Make sure you've configured your environment variables in the `.env` file as described in the main README.
+
+## How to Use
+
+1. **Start a Conversation**: Begin asking questions about the Fall of the Roman Empire
+2. **Use Flash Cards**: The agent will create flash cards for important concepts, which you can flip to see answers
+3. **Take Quizzes**: The agent will periodically offer quizzes to test your knowledge
+4. **Review Incorrect Answers**: Flash cards will automatically be created for questions you miss
 
 ## Contributing
 
-This template is open source and we welcome contributions! Please open a PR or issue through GitHub, and don't forget to join us in the [LiveKit Community Slack](https://livekit.io/join-slack)!
+This project is open source and we welcome contributions! Please open a PR or issue through GitHub, and don't forget to join us in the [LiveKit Community Slack](https://livekit.io/join-slack)!
