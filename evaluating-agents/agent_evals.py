@@ -12,7 +12,7 @@ load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 logger = logging.getLogger("openai_llm")
 logger.setLevel(logging.INFO)
 
-class SimpleAgent(Agent):
+class SimpleEvaluationAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
@@ -57,19 +57,13 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession()
 
     await session.start(
-        agent=SimpleAgent(),
+        agent=SimpleEvaluationAgent(),
         room=ctx.room,
         room_input_options=RoomInputOptions(
-            # uncomment to enable Krisp BVC noise cancellation
-            # noise_cancellation=noise_cancellation.BVC(),
-            # listen agents in addition to SIP and standard participants
             participant_kinds=[
-                rtc.ParticipantKind.PARTICIPANT_KIND_SIP,
-                rtc.ParticipantKind.PARTICIPANT_KIND_STANDARD,
                 rtc.ParticipantKind.PARTICIPANT_KIND_AGENT,
             ]
         ),
-
     )
 
 if __name__ == "__main__":
