@@ -31,11 +31,8 @@ class SimpleAgent(Agent):
     async def llm_node(
         self, chat_ctx, tools, model_settings=None
     ):
-        activity = self._Agent__get_activity_or_raise()
-        assert activity.llm is not None, "llm_node called but no LLM node is available"
-        
         async def process_stream():
-            async with activity.llm.chat(chat_ctx=chat_ctx, tools=tools, tool_choice=None) as stream:
+            async with self.llm.chat(chat_ctx=chat_ctx, tools=tools, tool_choice=None) as stream:
                 async for chunk in stream:
                     if chunk is None:
                         continue
