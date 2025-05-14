@@ -62,15 +62,12 @@ class SimpleAgent(Agent):
         return None
     
     async def llm_node(self, chat_ctx, tools, model_settings=None):
-        activity = self._Agent__get_activity_or_raise()
-        assert activity.llm is not None, "llm_node called but no LLM node is available"
-        
         async def process_stream():
             buffer = ""
             chunk_buffer = []
             sentence_end_chars = {'.', '!', '?'}
             
-            async with activity.llm.chat(chat_ctx=chat_ctx, tools=tools, tool_choice=None) as stream:
+            async with self.llm.chat(chat_ctx=chat_ctx, tools=tools, tool_choice=None) as stream:
                 try:
                     async for chunk in stream:
                         content = self._extract_content(chunk)
