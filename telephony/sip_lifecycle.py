@@ -88,10 +88,9 @@ class SIPLifecycleAgent(Agent):
         logger.info(f"Ending call by deleting room {room_name}")
         
         try:
-            await self.session.say("Thank you for your time. I'll be ending this call now. Goodbye!")
-            
-            await asyncio.sleep(3)
-            
+            await context.session.generate_reply(
+                instructions="Thank you for your time. I'll be ending this call now. Goodbye!"
+            )
             await self.job_context.api.room.delete_room(
                 api.DeleteRoomRequest(room=room_name)
             )
