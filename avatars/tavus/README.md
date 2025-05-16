@@ -2,6 +2,8 @@
 
 A LiveKit-powered educational AI agent that uses the Tavus to create an interactive study partner focused on teaching about the Fall of the Roman Empire.
 
+Demo: https://www.youtube.com/watch?v=iuX5PDP73bQ
+
 ## Features
 
 - **Conversational Teaching**: Uses the Socratic method to guide students through learning
