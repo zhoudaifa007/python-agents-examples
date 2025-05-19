@@ -21,12 +21,17 @@ This repository contains example code and demo applications for LiveKit Agents, 
 
 LiveKit Agents is a Python library that enables you to build intelligent conversational agents with speech, text, and media capabilities. This repository contains examples that demonstrate how to use various features of the library.
 
-## Installation
+## Set Up & Installation
 
-To use these examples, first install the LiveKit Agents library:
+To use these examples, first clone the repository and then install the required dependencies:
 
 ```bash
-pip install livekit-agents
+git clone https://github.com/livekit-examples/python-agents-examples.git
+cd python-agents-examples
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ## Key Features of LiveKit Agents
@@ -223,6 +228,7 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 ## Code Examples by Category
 
 ### Basic Features
+
 - [Listen and Respond](basics/listen_and_respond.py)
 - [Uninterruptable Agent](basics/uninterruptable.py)
 - [Playing Audio](basics/playing_audio.py)
@@ -231,6 +237,7 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 - [Sound Repeater](basics/repeater.py)
 
 ### LLM Integrations
+
 - [Anthropic Claude](pipeline-llm/anthropic_llm.py)
 - [Cerebras](pipeline-llm/cerebras_llm.py)
 - [Google Gemini](pipeline-llm/google_llm.py)
@@ -238,6 +245,7 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 - [OpenAI](pipeline-llm/openai_llm.py)
 
 ### TTS Integrations
+
 - [Cartesia](pipeline-tts/cartesia_tts.py)
 - [ElevenLabs](pipeline-tts/elevenlabs_tts.py)
 - [OpenAI](pipeline-tts/openai_tts.py)
@@ -245,41 +253,50 @@ For full documentation of LiveKit Agents, visit [https://docs.livekit.io/agents/
 - [Rime](pipeline-tts/rime_tts.py)
 
 ### STT and Voice Processing
+
 - [Transcription](pipeline-stt/transcriber.py)
 - [Keyword Detection](pipeline-stt/keyword_detection.py)
 
 ### Realtime Processing
+
 - [OpenAI Streaming](realtime/openai.py)
 
 ### Advanced LLM Features
+
 - [Interrupt User](pipeline-llm/interrupt_user.py)
 - [LLM Content Filter](pipeline-llm/llm_powered_content_filter.py)
 - [Simple Content Filter](pipeline-llm/simple_content_filter.py)
 - [Replacing LLM Output](pipeline-llm/replacing_llm_output.py)
 
 ### Translation Features
+
 - [Pipeline Translator](translators/pipeline_translator.py)
 - [TTS Translator](translators/tts_translator.py)
 
 ### Telephony
+
 - [Answer Call](telephony/answer_call.py)
 - [SIP Lifecycle](telephony/sip_lifecycle.py)
 - [Warm Handoff](telephony/warm_handoff.py)
 - [Survey Caller](telephony/survey_caller/)
 
 ### Metrics and Monitoring
+
 - [LLM Metrics](metrics/metrics_llm.py)
 - [STT Metrics](metrics/metrics_stt.py)
 - [TTS Metrics](metrics/metrics_tts.py)
 - [VAD Metrics](metrics/metrics_vad.py)
 
 ### Hardware Integration
+
 - [Raspberry Pi Transcriber](hardware/pi_zero_transcriber.py)
 
 ### Vision Agents
+
 - [Vision Agent](/vision/agent.py)
 
 ## Complex Demo Agents
+
 - [Medical Office Triage](complex-agents/medical_office_triage/)
 - [Personal Shopper](complex-agents/personal_shopper/)
 - [RAG-Enriched Agent](rag/)
