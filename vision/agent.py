@@ -1,8 +1,15 @@
+import asyncio
 import logging
 
 from dotenv import load_dotenv
 from livekit import rtc
-from livekit.agents import AutoSubscribe, JobContext, WorkerOptions, cli
+from livekit.agents import (
+    AutoSubscribe,
+    JobContext,
+    WorkerOptions,
+    cli,
+    get_job_context,
+)
 from livekit.agents.llm import ImageContent, ChatContext, ChatMessage
 from livekit.agents.voice import AgentSession, Agent, room_io
 from livekit.plugins import (
@@ -11,48 +18,20 @@ from livekit.plugins import (
     deepgram,
     noise_cancellation,
     silero,
-    turn_detector,
 )
 from pathlib import Path
 
-load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
-logger = logging.getLogger("voice-agent")
-
-
-async def get_video_track(room: rtc.Room):
-    """Find and return the first available remote video track in the room."""
-    for participant_id, participant in room.remote_participants.items():
-        for track_id, track_publication in participant.track_publications.items():
-            if track_publication.track and isinstance(
-                track_publication.track, rtc.RemoteVideoTrack
-            ):
-                logger.info(
-                    f"Found video track {track_publication.track.sid} "
-                    f"from participant {participant_id}"
-                )
-                return track_publication.track
-    raise ValueError("No remote video track found in the room")
-
-
-async def get_latest_image(room: rtc.Room):
-    """Capture and return a single frame from the video track."""
-    video_stream = None
-    try:
-        video_track = await get_video_track(room)
-        video_stream = rtc.VideoStream(video_track)
-        async for event in video_stream:
-            logger.debug("Captured latest video frame")
-            return event.frame
-    except Exception as e:
-        logger.error(f"Failed to get latest image: {e}")
-        return None
-    finally:
-        if video_stream:
-            await video_stream.aclose()
+load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env")
+logger = logging.getLogger("vision-agent")
 
 
 class Assistant(Agent):
     def __init__(self, room: rtc.Room) -> None:
+        self._latest_frame = None
+        self._room = room
+        self._tasks = []
+        self._video_stream = None
+
         super().__init__(
             instructions=(
                 "You are a voice assistant created by LiveKit that can both see and hear. "
@@ -64,27 +43,66 @@ class Assistant(Agent):
             stt=deepgram.STT(),
             llm=openai.LLM(model="gpt-4o-mini"),
             tts=cartesia.TTS(),
-            turn_detection=turn_detector.EOUModel(),
         )
-        self._room = room
 
-    async def on_end_of_turn(
-        self, chat_ctx: ChatContext, new_message: ChatMessage, generating_reply: bool
+    async def on_enter(self):
+        """
+        Lifecycle hook that runs after the agent becomes the active agent in a session.
+        Adds video track from a remote participant and then starts tracking frames from video.
+        """
+        logger.debug("Agent joining room")
+        room = get_job_context().room
+
+        # Find the first video track (if any) from the remote participant
+        remote_participant = list(room.remote_participants.values())[0]
+        video_tracks = [
+            publication.track
+            for publication in remote_participant.track_publications.values()
+            if publication.track is not None
+            and publication.track.kind == rtc.TrackKind.KIND_VIDEO
+        ]
+        if video_tracks:
+            self._create_video_stream(video_tracks[0])
+
+        # Watch for new video tracks not yet published
+        @room.on("track_subscribed")
+        def on_track_subscribed(track: rtc.Track):
+            logger.debug("New video track subscribed")
+            if track.kind == rtc.TrackKind.KIND_VIDEO:
+                self._create_video_stream(track)
+
+    async def on_user_turn_completed(
+        self, _: ChatContext, new_message: ChatMessage
     ) -> None:
         """
-        Callback that runs right before the LLM generates a response.
-        Captures the current video frame and adds it to the conversation context.
+        Lifecycle hook that runs after the user's turn has ended, before the agent's reply.
+        Captures the latest video frame and adds it to the conversation context.
         """
-        chat_ctx = chat_ctx.copy()
-
-        latest_image = await get_latest_image(self._room)
-        if latest_image:
-            image_content = ImageContent(image=latest_image)
-            new_message.content.append(image_content)
+        if self._latest_frame:
+            new_message.content.append(ImageContent(image=self._latest_frame))
             logger.debug("Added latest frame to conversation context")
+            self._latest_frame = None
 
-        chat_ctx.items.append(new_message)
-        await self.update_chat_ctx(chat_ctx)
+    def _create_video_stream(self, track: rtc.Track):
+        """
+        Helper method to buffer the latest video frame from the user's track
+        """
+        # Close any existing stream (we only want one at a time)
+        if self._video_stream is not None:
+            self._video_stream.close()
+
+        # Create a new stream to receive frames
+        self._video_stream = rtc.VideoStream(track)
+
+        async def read_stream():
+            async for event in self._video_stream:
+                # Store the latest frame for use later
+                self._latest_frame = event.frame
+
+        # Store the async task
+        task = asyncio.create_task(read_stream())
+        task.add_done_callback(lambda t: self._tasks.remove(t))
+        self._tasks.append(task)
 
 
 async def entrypoint(ctx: JobContext):
