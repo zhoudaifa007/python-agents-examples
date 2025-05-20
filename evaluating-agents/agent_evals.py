@@ -1,7 +1,8 @@
 import logging
 from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli
+from livekit import rtc
+from livekit.agents import JobContext, RoomInputOptions, WorkerOptions, cli
 from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent, AgentSession, RunContext
 from livekit.plugins import openai, deepgram, silero
@@ -11,7 +12,7 @@ load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 logger = logging.getLogger("openai_llm")
 logger.setLevel(logging.INFO)
 
-class SimpleAgent(Agent):
+class SimpleEvaluationAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
@@ -40,13 +41,13 @@ class SimpleAgent(Agent):
             tts=openai.TTS(),
             vad=silero.VAD.load()
         )
-    
+
     async def on_enter(self):
         self.session.generate_reply()
 
     @function_tool
     async def grade_answer(self, context: RunContext, result: str, question: str):
-        print(f"Grade for question: {question} - {result}")
+        logger.info(f"Grade for question: {question} - {result}")
         self.session.say(result)
         return None, "I've graded the answer."
 
@@ -56,8 +57,13 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession()
 
     await session.start(
-        agent=SimpleAgent(),
-        room=ctx.room
+        agent=SimpleEvaluationAgent(),
+        room=ctx.room,
+        room_input_options=RoomInputOptions(
+            participant_kinds=[
+                rtc.ParticipantKind.PARTICIPANT_KIND_AGENT,
+            ]
+        ),
     )
 
 if __name__ == "__main__":
