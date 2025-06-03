@@ -25,7 +25,6 @@ class LanguageSwitcherAgent(Agent):
             ),
             llm=openai.LLM(model="gpt-4o"),
             tts=elevenlabs.TTS(
-                encoding="pcm_44100",
                 model="eleven_turbo_v2_5",
                 language="en"
             ),
