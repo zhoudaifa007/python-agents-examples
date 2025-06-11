@@ -1,5 +1,3 @@
-# For this demo to work, you need to make sure you pull the most recent version of livekit-agents from the main branch.
-
 from pathlib import Path
 from dotenv import load_dotenv
 from typing import AsyncIterable, Optional
