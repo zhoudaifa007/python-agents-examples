@@ -40,7 +40,7 @@ function SimpleVoiceAssistant({
 }) {
   const { state, audioTrack } = useVoiceAssistant();
   const [room, setRoom] = useState<Room | null>(null);
-  const [phoneNumber, setPhoneNumber] = useState('+16138226746');
+  const [phoneNumber, setPhoneNumber] = useState('+16136136136');
   const [task, setTask] = useState('');
   const [taskSubmitted, setTaskSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
