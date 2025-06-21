@@ -92,3 +92,6 @@ You can customize the agents by:
 2. Adjusting the LLM model or other components in each agent's `__init__` method
 3. Adding new transfer functions or tools to handle additional scenarios
 4. Implementing additional agents for other departments
+
+## Deepwiki
+- https://deepwiki.com/livekit-examples/python-agents-examples/5.1-medical-office-triage-system
